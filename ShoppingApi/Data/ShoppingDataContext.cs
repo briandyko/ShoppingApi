@@ -8,11 +8,11 @@ namespace ShoppingApi.Data
 {
     public class ShoppingDataContext : DbContext
     {
-        public ShoppingDataContext(DbContextOptions<ShoppingDataContext> options):base(options)
+        public ShoppingDataContext(DbContextOptions<ShoppingDataContext> options) : base(options)
         {
 
         }
-        
+
         public IQueryable<Product> GetItemsInInventory()
         {
             return this.Products.Where(p => p.InInventory);
@@ -24,6 +24,7 @@ namespace ShoppingApi.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<CurbsideOrder> CurbsideOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

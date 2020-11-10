@@ -52,6 +52,9 @@ namespace ShoppingApi
             services.AddSingleton<MapperConfiguration>(mapperConfig);
 
 
+            services.AddScoped<ICurbsideCommands, EfSqlSynchCurbside>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
