@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ShoppingApi.Data;
 using ShoppingApi.Models.Products;
+using ShoppingApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,14 @@ namespace ShoppingApi.Profiles
 {
     public class ProductProfile : Profile
     {
-        public ProductProfile()
+        public ProductProfile(PricingConfiguration config)
         {
+            CreateMap<Product, ProductSummaryItem>()
+                .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice * config.Markup));
             CreateMap<Product, ProductSummaryItem>();
 
-            CreateMap<Product, GetProductDetailsResponse>();
+            CreateMap<Product, GetProductDetailsResponse>()
+                .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice * config.Markup));
 
             CreateMap<PostProductRequest, Product>()
                 .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(s => s.UnitPrice.Value))
