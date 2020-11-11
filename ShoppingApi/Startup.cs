@@ -45,6 +45,10 @@ namespace ShoppingApi
             // Makes this injectable into services using Ioptions<T>
             services.Configure<PricingConfiguration>(Configuration.GetSection(pricingConfig.SectionName));
 
+            var pickupConfig = new PickupEstimatorConfiguration();
+            Configuration.GetSection(pickupConfig.SectionName).Bind(pickupConfig);
+            services.Configure<PickupEstimatorConfiguration>(Configuration.GetSection(pickupConfig.SectionName));
+
             var mapperConfig = new MapperConfiguration(opt =>
             {
                 opt.AddProfile(new ProductProfile(pricingConfig));
@@ -58,6 +62,8 @@ namespace ShoppingApi
             services.AddScoped<ICurbsideCommands, EfSqlAsyncCurbside>();
             services.AddScoped<ICurbsideLookups, EfSqlAsyncCurbside>();
             services.AddSingleton<CurbsideChannel>();
+
+            services.AddScoped<IGenerateCurbsidePickupTimes, GrpcPickupEstimator>();
 
             services.AddHostedService<CurbsideOrderProcessor>();
 
